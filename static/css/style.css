@@ -573,6 +573,11 @@ a { color: inherit; text-decoration: none; }
     margin-bottom: 0.5rem;
 }
 
+.legal-card strong {
+    color: var(--ink);
+    font-weight: 600;
+}
+
 .legal-card li::before {
     content: "◈";
     position: absolute;

@@ -23,7 +23,7 @@
         </p>
         <div class="hero-actions">
             <a href="{{ url_for('register') }}" class="btn-hero">Create free account</a>
-            <a href="#" class="btn-hero">See how it works</a>
+            <a href="#" class="btn-hero" id="video-open">See how it works</a>
         </div>
     </div>
 
@@ -105,4 +105,67 @@
     </div>
 </section>
 
+<!-- "See how it works" video modal -->
+<div class="video-modal" id="video-modal" role="dialog" aria-modal="true"
+     aria-labelledby="video-modal-title" hidden>
+    <div class="video-modal-panel">
+        <div class="video-modal-head">
+            <h2 class="video-modal-title" id="video-modal-title">See how Spendly works</h2>
+            <button type="button" class="video-modal-close" id="video-close"
+                    aria-label="Close video">&times;</button>
+        </div>
+        <div class="video-modal-frame">
+            <!-- Placeholder video — swap the embed URL for the real one. -->
+            <iframe id="video-frame"
+                    data-src="https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0"
+                    title="Spendly product tour"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    var modal = document.getElementById('video-modal');
+    var frame = document.getElementById('video-frame');
+    var openBtn = document.getElementById('video-open');
+    var closeBtn = document.getElementById('video-close');
+
+    if (!modal || !frame || !openBtn) return;
+
+    function openModal(e) {
+        e.preventDefault();
+        // Setting src only on open means the video never loads until asked for.
+        frame.src = frame.dataset.src;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+    }
+
+    function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        // Clearing src tears down the player, which is what actually stops playback.
+        frame.src = '';
+        openBtn.focus();
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+
+    // Click on the overlay itself (not the panel) closes.
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+})();
+</script>
 {% endblock %}

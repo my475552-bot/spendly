@@ -195,6 +195,76 @@
 .mock-bar-bills { background: #7b68d4; }
 
 /* ------------------------------------------------------------------ */
+/* Video modal                                                         */
+/* ------------------------------------------------------------------ */
+
+.video-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(15, 15, 15, 0.6);
+}
+
+.video-modal[hidden] { display: none; }
+
+.video-modal-panel {
+    width: 100%;
+    max-width: 880px;
+    background: var(--paper-card);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+
+.video-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.video-modal-title {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.video-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--ink-muted);
+    cursor: pointer;
+    padding: 0 0.25rem;
+    transition: color 0.2s;
+}
+
+.video-modal-close:hover { color: var(--ink); }
+
+.video-modal-frame {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 */
+    background: var(--ink);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.video-modal-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* ------------------------------------------------------------------ */
 /* Responsive                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -207,4 +277,6 @@
     .hero { padding: 3rem 1rem 2rem; }
     .hero-actions { flex-direction: column; align-items: stretch; }
     .mock-bar-row { grid-template-columns: 70px 1fr; }
+    .video-modal { padding: 1rem; }
+    .video-modal-panel { padding: 1rem; }
 }

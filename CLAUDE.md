@@ -94,10 +94,11 @@ pytest -s
 | Route | Status |
 |---|---|
 | `GET /` | Implemented — renders `landing.html` |
-| `GET /register` | Implemented — renders `register.html` |
-| `POST /register` | Implemented — validates, creates user, redirects to `/login` |
-| `GET /login` | Implemented — renders `login.html` |
-| `GET /logout` | Stub — Step 3 |
+| `GET /register` | Implemented — renders `register.html`; redirects to `/` if already signed in |
+| `POST /register` | Implemented — validates, creates user, redirects to `/login`; redirects to `/` if already signed in |
+| `GET /login` | Implemented — renders `login.html`; redirects to `/` if already signed in |
+| `POST /login` | Implemented — verifies credentials, sets session, redirects to `/` |
+| `GET /logout` | Implemented — clears session, redirects to `/` |
 | `GET /profile` | Stub — Step 4 |
 | `GET /expenses/add` | Stub — Step 7 |
 | `GET /expenses/<id>/edit` | Stub — Step 8 |

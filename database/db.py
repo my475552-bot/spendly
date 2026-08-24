@@ -128,6 +128,24 @@ def get_user_by_email(email):
         conn.close()
 
 
+def get_user_by_id(user_id):
+    """Return the user row for ``user_id``, or None if there is no match.
+
+    Used to turn ``session["user_id"]`` back into a user on each request. A
+    None result is normal, not an error: the row may have been deleted while
+    the signed session cookie was still valid.
+
+    The result is a ``sqlite3.Row``, not a dict (see ``get_db``).
+    """
+    conn = get_db()
+    try:
+        return conn.execute(
+            "SELECT * FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
+    finally:
+        conn.close()
+
+
 def create_user(name, email, password_hash):
     """Insert a new user and return the new row's id.
 

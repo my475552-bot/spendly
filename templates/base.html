@@ -19,13 +19,30 @@
                 <span class="brand-name">Spendly</span>
             </a>
             <div class="nav-links">
+                {% if current_user %}
+                <span class="nav-user">{{ current_user['name'] }}</span>
+                <a href="{{ url_for('logout') }}" class="nav-signout">Sign out</a>
+                {% else %}
                 <a href="{{ url_for('login') }}">Sign in</a>
                 <a href="{{ url_for('register') }}" class="nav-cta">Get started</a>
+                {% endif %}
             </div>
         </div>
     </nav>
 
     <main class="main-content">
+        {# Rendered once, here only: get_flashed_messages() consumes the queue,
+           so a second call anywhere would render an empty block. Never add
+           |safe to {{ message }} — the welcome flash interpolates a
+           user-supplied name and autoescaping is what makes that safe. #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </main>
 

@@ -16,6 +16,7 @@
     --accent-2-light: #fdf3e3;
     --danger: #c0392b;
     --danger-light: #fdecea;
+    --danger-border: #f5c6c2;
     --border: #e4e1da;
     --border-soft: #eeebe4;
 
@@ -113,11 +114,43 @@ a { color: inherit; text-decoration: none; }
 
 .nav-cta:hover { background: var(--accent) !important; }
 
+.nav-user {
+    color: var(--ink);
+    font-weight: 600;
+    padding-right: 0.25rem;
+}
+
 /* ------------------------------------------------------------------ */
 /* Main                                                                */
 /* ------------------------------------------------------------------ */
 
 .main-content { min-height: calc(100vh - 60px - 100px); }
+
+/* ------------------------------------------------------------------ */
+/* Flash messages                                                      */
+/* ------------------------------------------------------------------ */
+
+.flash {
+    max-width: var(--max-width);
+    margin: 1.25rem auto 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.flash-success {
+    background: var(--accent-light);
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.flash-info {
+    background: var(--accent-2-light);
+    color: var(--accent-2);
+    border-color: var(--accent-2);
+}
 
 /* ------------------------------------------------------------------ */
 /* Buttons                                                             */
@@ -276,7 +309,7 @@ a { color: inherit; text-decoration: none; }
 .auth-error {
     background: var(--danger-light);
     color: var(--danger);
-    border: 1px solid #f5c6c2;
+    border: 1px solid var(--danger-border);
     border-radius: var(--radius-sm);
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
@@ -489,7 +522,10 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 600px) {
-    .nav-links a:not(.nav-cta) { display: none; }
+    /* Sign out must survive here — logged in there is no .nav-cta, so the
+       bare :not(.nav-cta) rule would leave no way to sign out on mobile. */
+    .nav-links a:not(.nav-cta):not(.nav-signout) { display: none; }
+    .nav-user { display: none; }
     .legal-section { padding: 2.5rem 1rem 3rem; }
     .legal-card { padding: 1.5rem; }
 }

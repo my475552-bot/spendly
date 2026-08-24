@@ -21,6 +21,7 @@ spendly/
 │   │   └── landing.css     # Landing-page-only styles
 │   └── js/
 │       └── main.js         # Vanilla JS only
+├── tests/                  # pytest — conftest.py points SPENDLY_DB at a temp DB
 └── requirements.txt
 ```
 
@@ -94,6 +95,7 @@ pytest -s
 |---|---|
 | `GET /` | Implemented — renders `landing.html` |
 | `GET /register` | Implemented — renders `register.html` |
+| `POST /register` | Implemented — validates, creates user, redirects to `/login` |
 | `GET /login` | Implemented — renders `login.html` |
 | `GET /logout` | Stub — Step 3 |
 | `GET /profile` | Stub — Step 4 |
@@ -112,6 +114,6 @@ pytest -s
 - **Never put DB logic in route functions** — it belongs in `database/db.py`
 - **Never install new packages** mid-feature without flagging it — keep `requirements.txt` in sync
 - **Never use JS frameworks** — the frontend is intentionally vanilla
-- **`database/db.py` is currently empty** — do not assume helpers exist until the step that implements them
+- **Tests must never write to `expense_tracker.db`** — `tests/conftest.py` sets `SPENDLY_DB` at module level, *before* importing `app`. `DB_PATH` is read once at import, so `monkeypatch.setenv` and `tmp_path` are both too late to help
 - **FK enforcement is manual** — SQLite foreign keys are off by default; `get_db()` must run `PRAGMA foreign_keys = ON` on every connection
 - The app runs on **port 5001**, not the Flask default 5000 — don't change this

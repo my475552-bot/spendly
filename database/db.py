@@ -20,7 +20,10 @@ from datetime import date
 from werkzeug.security import generate_password_hash
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DB_PATH = os.path.join(BASE_DIR, "expense_tracker.db")
+# Read once, at import. Tests set SPENDLY_DB before importing this module so
+# they never touch the real database; unset, the path is unchanged.
+DB_PATH = os.environ.get("SPENDLY_DB",
+                         os.path.join(BASE_DIR, "expense_tracker.db"))
 
 # Fixed category list — the de-facto enum for expenses.category.
 CATEGORIES = ("Food", "Transport", "Bills", "Health",
@@ -104,6 +107,43 @@ def seed_db():
             ],
         )
         conn.commit()
+    finally:
+        conn.close()
+
+
+def get_user_by_email(email):
+    """Return the user row for ``email``, or None if there is no match.
+
+    The lookup is case-sensitive, exactly like the UNIQUE constraint on the
+    column — callers must lowercase the email themselves first.
+
+    The result is a ``sqlite3.Row``, not a dict (see ``get_db``).
+    """
+    conn = get_db()
+    try:
+        return conn.execute(
+            "SELECT * FROM users WHERE email = ?", (email,)
+        ).fetchone()
+    finally:
+        conn.close()
+
+
+def create_user(name, email, password_hash):
+    """Insert a new user and return the new row's id.
+
+    ``password_hash`` must already be hashed — this function never sees a
+    plaintext password. Raises ``sqlite3.IntegrityError`` if the email is
+    already taken; the caller decides how to report that.
+    """
+    conn = get_db()
+    try:
+        cur = conn.execute(
+            "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+            (name, email, password_hash),
+        )
+        user_id = cur.lastrowid
+        conn.commit()
+        return user_id
     finally:
         conn.close()
 
